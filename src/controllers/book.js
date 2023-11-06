@@ -3,7 +3,10 @@ const Books = require("../models/model");
 exports.createBook = async (req, res) => {
   const { title, author, summary } = req.body;
   if (!title || !author || !summary) {
-    throw "Please fill all the fields";
+    res.status(404).json({
+      success: true,
+      message: "Please fill all the details"
+    })
   } else {
     const bookDetails = await Books.create(req.body);
     res.status(201).json({
@@ -24,7 +27,10 @@ exports.getAllBooks = async (req, res) => {
 exports.getBook = async (req, res) => {
   let bookDetail = await Books.findById(req.params.id).select("-__v");
   if (!bookDetail) {
-    return "Book Not Found";
+    res.status(404).json({
+      success: true,
+      message: "Book Not Found"
+    })
   }
   res.status(200).json({
     success: true,
@@ -35,7 +41,10 @@ exports.getBook = async (req, res) => {
 exports.updateBook = async (req, res) => {
   let bookDetail = await Books.findById(req.params.id);
   if (!bookDetail) {
-    return "Book Not Found";
+    res.status(404).json({
+      success: true,
+      message: "Book Not Found"
+    })
   }
   bookDetail = await Books.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
@@ -51,7 +60,10 @@ exports.updateBook = async (req, res) => {
 exports.deleteBook = async (req, res) => {
   let bookDetail = await Books.findById(req.params.id);
   if (!bookDetail) {
-    return "Book Not Found";
+    res.status(404).json({
+      success: true,
+      message: "Book Not Found"
+    })
   }
   await Books.findByIdAndDelete(req.params.id);
   res.status(200).json({
